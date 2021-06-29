@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.5.1-0-g916b5db  Build Version: 1.5.7152.31018
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot name="robo">
+    <link name="base_link">
+        
+<inertial>
+            <origin xyz="-6.0852E-36 0.17501 1.2115E-18" rpy="0 0 0" />
+            <mass value="3.9587" />
+            <inertia ixx="0.043981" ixy="-8.0354E-35" ixz="-5.8559E-37" iyy="0.0071251" iyz="-1.1902E-21" izz="0.043981" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/base_link.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.79216 0.81961 0.93333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/base_link.STL" />
+            </geometry>
+        </collision>
+    </link>
+    
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+
+    <joint name="fixed" type="fixed">
+    	<parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+
+  
+    <link name="arm">
+        
+<inertial>
+            <origin xyz="0.047736 0.003 -7.0673E-19" rpy="0 0 0" />
+            <mass value="0.021197" />
+            <inertia ixx="1.6002E-06" ixy="1.0914E-22" ixz="-3.2692E-22" iyy="2.6543E-05" iyz="1.7356E-23" izz="2.5069E-05" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/arm.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.79216 0.81961 0.93333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/arm.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint1" type="continuous">
+        <origin xyz="0 0 0.359" rpy="-1.5567 0 0" />
+        <parent link="base_link" />
+        <child link="arm" />
+        <axis xyz="0 1 0" />
+        <dynamics damping="0.05" friction="0.1" />
+    </joint>
+    <link name="pendulum">
+        
+<inertial>
+            <origin xyz="0.005 0.14596 -6.5422E-19" rpy="0 0 0" />
+            <mass value="0.029804" />
+            <inertia ixx="0.00022109" ixy="1.298E-22" ixz="-1.168E-23" iyy="4.9806E-07" iyz="-5.5346E-23" izz="0.00022109" />
+        </inertial>
+
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/pendulum.STL" />
+            </geometry>
+            <material name="">
+                <color rgba="0.79216 0.81961 0.93333 1" />
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="package://pendulum_12/meshes/pendulum.STL" />
+            </geometry>
+        </collision>
+    </link>
+    <joint name="joint2" type="continuous">
+        <origin xyz="0.11 0.003 0" rpy="0 0 0" />
+        <parent link="arm" />
+        <child link="pendulum" />
+        <axis xyz="1 0 0" />
+        <dynamics friction="0.001" />
+    </joint>
+    
+<transmission name="trans_joint1">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint1">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint1_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    <transmission name="trans_joint2">
+        <type>transmission_interface/SimpleTransmission</type>
+        <joint name="joint2">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+        </joint>
+        <actuator name="joint2_motor">
+            <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            <mechanicalReduction>1</mechanicalReduction>
+        </actuator>
+    </transmission>
+    
+    <gazebo>
+    	<plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+    	<robotNamespace>/ip</robotNamespace>
+    	</plugin>
+    </gazebo>
+</robot>
